@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="/favicon.png" />
+
+    {% include "../includes/head.html" %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% include "../includes/foot.html" %}
+    {% block endscripts %}{% endblock %}
+</body>
+</html>

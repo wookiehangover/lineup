@@ -1,0 +1,128 @@
+@import "bootstrap/bootstrap.less";
+
+// Bootstrap Overrides
+@import "overrides";
+@brand-primary: rgb(77, 226, 237);
+
+// Custom Colors
+@extra-light-grey: rgb(216, 216, 216);
+@medium-dark-grey: rgb(74, 74, 74);
+@brand-lowlight: darken(@brand-primary, 20%);
+
+html, body {
+  height: 100%;
+}
+
+// components
+@import "components/rainbows";
+@import "components/big-form";
+
+// pages
+@import "pages/login.less";
+@import "pages/inbox.less";
+
+.flex() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.home {
+  .flex;
+  height: 100%;
+}
+
+.home section {
+  display: inline-block;
+  margin: auto;
+  width: 100%;
+  h1 {
+    text-align: center;
+  }
+
+  .nav a {
+    color: @gray;
+    .transition(color 200ms ease-in);
+
+    &:hover {
+      color: @gray-base;
+    }
+  }
+}
+
+.home section h1 {
+  color: @gray-darker;
+  padding-bottom: 1em;
+
+  strong {
+    color: @brand-primary;
+  }
+
+  &:hover strong {
+    .animation(rainbows 10s infinite);
+  }
+
+  @media (min-width: @screen-lg-min) {
+    font-size: @big-ass-font-lg;
+  }
+}
+
+#score {
+  position: relative;
+}
+
+#score .item-title-card {
+  border-bottom: 5px solid @brand-primary;
+}
+
+#score nav {
+  span {
+    position: absolute;
+    top: 280px;
+    color: rgb(221, 221, 221);
+    font-size: 2em;
+  }
+
+  .prev {
+    left: 0;
+  }
+  .next {
+    right: 0;
+  }
+}
+
+#score .scale {
+  height: 400px;
+  margin: 2em auto;
+  border: 1px solid @gray-light;
+  border-radius: 4px;
+  .flex;
+  justify-content: center;
+
+  .bar {
+    width: 6em;
+    border: 1px solid @gray-light;
+    border-radius: 2px;
+    margin: 2em;
+    align-self: flex-end;
+    .transition(background-color 200ms ease-in);
+
+    &.active {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQAMF0gX/GZHFQAITnk5ghAvCBECKwILIAmBBdAGQIABLaRIAScA0FgAAAABJRU5ErkJggg==);
+      background-repeat: repeat;
+    }
+
+    &:hover {
+      background-color: @brand-primary;
+    }
+
+  }
+
+  .bar-zero   { height: 5%; }
+  .bar-small  { height: 15%; }
+  .bar-medium { height: 33%; }
+  .bar-large  { height: 50%; }
+  .bar-xlarge { height: 80%; }
+}
