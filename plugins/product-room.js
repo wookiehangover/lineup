@@ -35,6 +35,6 @@ exports.register = function(plugin, options, next) {
 };
 
 exports.register.attributes = {
-  name: 'Project Room',
+  name: 'Product Room',
   version: '1.0.0'
 };
