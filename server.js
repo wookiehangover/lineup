@@ -29,7 +29,7 @@ server.pack.register([
     plugin: require('./plugins/home'),
   },
   {
-    plugin: require('./plugins/project-room'),
+    plugin: require('./plugins/product-room'),
     options: {
       streamer: streamer
     }

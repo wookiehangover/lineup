@@ -6573,6 +6573,9 @@ body {
   display: flex;
   height: 100%;
 }
+.home.logged-out {
+  text-align: center;
+}
 .home section {
   display: inline-block;
   margin: auto;

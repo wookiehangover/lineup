@@ -4,7 +4,7 @@ var sprintly = require('../lib/sprintly');
 
 function loginHandler(request, reply) {
   if (request.auth.isAuthenticated) {
-    return reply.redirect('/room');
+    return reply.redirect('/');
   }
 
   if (request.method === 'get' ) {

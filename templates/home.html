@@ -3,9 +3,12 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-<div class="container home">
+<div class="container home {% if !user %}logged-out{% endif %}">
   <section>
     <h1><strong>Sprintly</strong> LINEUP</h1>
+    {% if !user %}
+    <a href="/login" class="btn btn-default">Sign In</a>
+    {% endif %}
     {% if products %}
       <ul class="nav nav-pills" role="tablist">
       {% for product in products %}
