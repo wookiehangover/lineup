@@ -3,29 +3,20 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-<div class="container-fluid room">
-
-  <section id="score">
-    <div class="item-title-card">
-      <h1>...</h1>
+<div class="quicksort" id="quicksort"></div>
+<div class="room" id="story">
+  <div class="navbar navbar-inverse" id="item-header">
+    <div class="container-fluid">
     </div>
-    <div class="scale container">
-      <div class="bar bar-zero"></div>
-      <div class="bar bar-small"></div>
-      <div class="bar bar-medium"></div>
-      <div class="bar bar-large"></div>
-      <div class="bar bar-xlarge"></div>
-    </div>
-    <nav>
-      <span class="prev glyphicon glyphicon-chevron-left"></span>
-      <span class="next glyphicon glyphicon-chevron-right"></span>
-    </nav>
-  </section>
-
+  </div>
+  <a href="/room/{{room}}">Room</a>
 </div>
 <script>
-  var sprintly_user = {{ JSON.stringify(user) }};
-  var sprintly_product = {{ JSON.stringify(product) }};
+  window.sprintly_data = {
+    user: {{ JSON.stringify(user) }},
+    product: {{ JSON.stringify(product) }},
+    room: "{{ room }}"
+  }
 </script>
 {% endblock %}
 
