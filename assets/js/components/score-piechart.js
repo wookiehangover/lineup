@@ -24,7 +24,7 @@ var ScorePiechart = React.createClass({
     return (
       <div className="room-link">
         <a href={linkText + roomId}>{linkText}</a>
-        <div className="col-xs-4">
+        <div className="col-xs-3">
           <input className="form-control" defaultValue={roomId}/>
         </div>
       </div>
