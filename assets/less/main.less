@@ -1,4 +1,5 @@
 @import "bootstrap/bootstrap.less";
+@import "components/keen-dashboards.less";
 
 // Bootstrap Overrides
 @import "overrides";
@@ -103,7 +104,8 @@ html, body {
   height: 14px;
   line-height: 14px;
   color: transparent;
-  .transition(~"color,background,borer 200ms ease-in-out");
+  .opacity(0.5);
+  .transition(~"opacity,color,background,border 200ms ease-in-out");
 
   &.item-story {
     background-color: @story-primary;
@@ -125,7 +127,13 @@ html, body {
     border-color: @test-primary;
   }
 
-  &:hover {
-    border-color: #fff;
+  &:hover,
+  &.active {
+    .opacity(1);
+    position: relative;
+    display: block;
+    height: 20px;
+    z-index: 1000;
+    .box-shadow(0px 1px 8px #000);
   }
 }

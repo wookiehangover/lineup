@@ -19,7 +19,10 @@
   var socket = io();
   socket.emit('join room', '{{room}}');
   socket.on('msg', function(msg) {
-    console.log(msg)
+    if (msg.type === 'item') {
+      $('h1.active').removeClass('active');
+      $('body').removeClass('voted');
+    }
   })
 
   $(function() {
