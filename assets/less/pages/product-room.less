@@ -1,0 +1,172 @@
+.story-container nav {
+  a {
+    position: absolute;
+    top: 40%;
+    color: rgb(221, 221, 221);
+    font-size: 2em;
+    text-decoration: none;
+    .transition(color 200ms ease-in-out);
+
+    padding: 3em 1em;
+
+
+    &:hover {
+      color: #222;
+      border: 1px solid @gray-light;
+      border-radius: 3px;
+    }
+  }
+
+  .prev {
+    left: 1em;
+  }
+  .next {
+    right: 1em;
+  }
+}
+
+.story-container .navbar h1 {
+  margin: 0.775em 0;
+  color: #fff;
+  line-height: 1.4;
+
+  .title-detail {
+    background: #666;
+    padding: 0 6px;
+    margin: 0 6px;
+  }
+}
+
+.score {
+  position: relative;
+}
+
+.score .item-title-card {
+  border-bottom: 5px solid @brand-primary;
+}
+
+
+
+.score .scale {
+  width: 100%;
+  height: 400px;
+  margin: auto;
+  .flex;
+  justify-content: center;
+  padding: 0 1.5em;
+
+  .bar {
+    width: 6em;
+    border: 1px solid @gray-light;
+    border-radius: 2px;
+    margin: 2em 0.5em;
+    align-self: flex-end;
+    .transition(background-color 200ms ease-in);
+
+    &.active {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQAMF0gX/GZHFQAITnk5ghAvCBECKwILIAmBBdAGQIABLaRIAScA0FgAAAABJRU5ErkJggg==);
+      background-repeat: repeat;
+    }
+
+    &:hover {
+      background-color: @brand-primary;
+    }
+
+  }
+
+  .bar-zero   {
+    height: 5%;
+
+    &.active {
+      background-color: rgba(77,226,237,0.7);
+    }
+  }
+
+  .bar-small  {
+    height: 15%;
+
+    &.active {
+      background-color: rgba(77,115,237,0.7);
+    }
+  }
+
+  .bar-medium {
+    height: 33%;
+
+    &.active {
+      background-color: rgba(131,77,237,0.7);
+    }
+  }
+
+  .bar-large  {
+    height: 50%;
+
+    &.active {
+      background-color: rgba(237,77,183,0.7);
+    }
+  }
+
+  .bar-xlarge {
+    height: 80%;
+
+    &.active {
+      background-color: rgba(237,77,77,0.7);
+    }
+  }
+}
+
+.story-container .navbar {
+  top: 16px;
+  height: auto;
+}
+
+.votes {
+  .flex();
+  flex-direction: column;
+  justify-content: center;
+  align-content: flex-end;
+  position: relative;
+
+  .room-link {
+    margin: 1.2em 0 5em;
+
+    a {
+      float: left;
+      color: #222;
+      text-decoration: none;
+      font-size: 1.2em;
+      margin-top: 6px;
+    }
+
+    input {
+      font-size: 1.2em;
+    }
+  }
+
+  svg {
+    margin: auto
+  }
+
+  h3 {
+    margin: 1em auto;
+    font-size: 1.5em;
+    font-weight: normal;
+  }
+
+  .team-score {
+    position: absolute;
+    width: 20%;
+    top: 45%;
+    left: 40%;
+    margin: 0;
+    text-align: center;
+    font-size: 6em;
+    text-transform: uppercase;
+  }
+}
+
+.user-status {
+  font-size: 1.5em;
+  text-align: right;
+  margin: 1em 0;
+}

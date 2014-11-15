@@ -1,0 +1,26 @@
+body.voted {
+  background: #333;
+
+  .mobile-room h1 a {
+    color: #fff;
+  }
+}
+
+.mobile-room h1 {
+  text-align: center;
+  border: 1px solid @gray;
+  margin: 0.5em 1em;
+  padding: 0.5em;
+  border-radius: 3px;
+
+  a {
+    display: inline-block;
+    width: 100%;
+    color: #222;
+  }
+
+  &.active {
+    a { color: #fff; }
+    background: @brand-primary;
+  }
+}

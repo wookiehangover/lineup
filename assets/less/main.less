@@ -9,6 +9,11 @@
 @medium-dark-grey: rgb(74, 74, 74);
 @brand-lowlight: darken(@brand-primary, 20%);
 
+@story-primary:  #B8E986;
+@defect-primary: #FF5B14;
+@task-primary:   #333333;
+@test-primary:   #4DE2ED;
+
 html, body {
   height: 100%;
 }
@@ -19,7 +24,8 @@ html, body {
 
 // pages
 @import "pages/login.less";
-@import "pages/inbox.less";
+@import "pages/product-room.less";
+@import "pages/mobile-room.less";
 
 .flex() {
   display: -webkit-box;
@@ -74,60 +80,52 @@ html, body {
   }
 }
 
-#score {
-  position: relative;
+.quicksort {
+  top: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  height: 16px;
+  background: #222;
+
+  .quicksort-inner {
+    display: table;
+    width: 100%;
+  }
+
 }
 
-#score .item-title-card {
-  border-bottom: 5px solid @brand-primary;
-}
+.quicksort .quicksort-item {
+  display: table-cell;
+  border: 1px solid;
+  font-size: 14px;
+  text-align: center;
+  height: 14px;
+  line-height: 14px;
+  color: transparent;
+  .transition(~"color,background,borer 200ms ease-in-out");
 
-#score nav {
-  span {
-    position: absolute;
-    top: 280px;
-    color: rgb(221, 221, 221);
-    font-size: 2em;
+  &.item-story {
+    background-color: @story-primary;
+    border-color: @story-primary;
   }
 
-  .prev {
-    left: 0;
-  }
-  .next {
-    right: 0;
-  }
-}
-
-#score .scale {
-  height: 400px;
-  margin: 2em auto;
-  border: 1px solid @gray-light;
-  border-radius: 4px;
-  .flex;
-  justify-content: center;
-
-  .bar {
-    width: 6em;
-    border: 1px solid @gray-light;
-    border-radius: 2px;
-    margin: 2em;
-    align-self: flex-end;
-    .transition(background-color 200ms ease-in);
-
-    &.active {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQAMF0gX/GZHFQAITnk5ghAvCBECKwILIAmBBdAGQIABLaRIAScA0FgAAAABJRU5ErkJggg==);
-      background-repeat: repeat;
-    }
-
-    &:hover {
-      background-color: @brand-primary;
-    }
-
+  &.item-defect {
+    background-color: @defect-primary;
+    border-color: @defect-primary;
   }
 
-  .bar-zero   { height: 5%; }
-  .bar-small  { height: 15%; }
-  .bar-medium { height: 33%; }
-  .bar-large  { height: 50%; }
-  .bar-xlarge { height: 80%; }
+  &.item-task {
+    background-color: @task-primary;
+    border-color: @task-primary;
+  }
+
+  &.item-test {
+    background-color: @test-primary;
+    border-color: @test-primary;
+  }
+
+  &:hover {
+    border-color: #fff;
+  }
 }
