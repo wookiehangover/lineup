@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var React = require('react');
-var Backlog = require('./components/backlog');
+var Dashboard = require('./components/dashboard');
 var Quicksort = require('./components/quicksort');
 var sprintly = require('sprintly-data');
 
@@ -15,7 +15,7 @@ $(function() {
     client: client,
     product: product,
     backlog: React.render(
-      <Backlog backlog={backlog} socket={socket} roomId={sprintly_data.room} />,
+      <Dashboard backlog={backlog} socket={socket} roomId={sprintly_data.room} />,
       document.getElementById('story')
     ),
     quicksort: React.render(

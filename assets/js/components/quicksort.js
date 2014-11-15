@@ -21,15 +21,25 @@ var Backlog = React.createClass({
     this.props.backlog.on('sync change', function() {
       self.forceUpdate();
     });
+
+    this.props.backlog.on('currentItem', function(index) {
+      self.setState({ currentItem: index });
+    });
   },
 
   render: function() {
 
     return (
       <div className="quicksort-inner">
-        {this.props.backlog.map(function(model){
-          var classes = ['quicksort-item', 'item-' + model.get('type')].join(' ')
-          return (<div className={classes}>+</div>);
+        {this.props.backlog.map(function(model, i){
+          var classes = {
+            'quicksort-item': true,
+            'active': i == this.state.currentItem
+          };
+
+          classes['item-' + model.get('type')] = true;
+
+          return (<div className={React.addons.classSet(classes)}>+</div>);
         }, this)}
       </div>
     );
