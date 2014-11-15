@@ -1,0 +1,43 @@
+{% extends './layouts/default.html' %}
+
+{% block title %}Mobile Room{% endblock %}
+
+{% block content %}
+<div class="container-fluid mobile-room"> 
+  <h1><a href="#">XL</a></h1>
+  <h1><a href="#">L</a></h1>
+  <h1><a href="#">M</a></h1>
+  <h1><a href="#">S</a></h1>
+  <h1><a href="#">~</a></h1>
+</div>
+{% endblock %}
+
+{% block endscripts %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  socket.emit('join room', '{{room}}');
+  socket.on('msg', function(msg) {
+    console.log(msg)
+  })
+
+  $(function() {
+    var room = '{{room}}';
+    $('h1 a').on('touchstart click', function(e) {
+      e.preventDefault();
+      socket.emit('room message', room, { score: $(this).text(), type: 'vote' });
+      $('h1.active').removeClass('active');
+      $(this).parent().addClass('active');
+      $('body').addClass('voted');
+      return false;
+    })
+
+    socket.on('reconnect', function() {
+      console.log('re-joining')
+      socket.emit('join room', room);
+    });
+  });
+</script>
+{% endblock %}
+
