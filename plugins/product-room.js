@@ -1,12 +1,13 @@
 var sprintly = require('../lib/sprintly');
+var uuid = require('uuid');
 
 exports.register = function(plugin, options, next) {
 
-  if (!options.streamer) {
-    throw new Error('Streamer instance is required');
+  if (!options.manager) {
+    throw new Error('RoomManager instance is required');
   }
 
-  var streamer = options.streamer;
+  var manager = options.manager;
 
   plugin.route([
     {
@@ -15,9 +16,10 @@ exports.register = function(plugin, options, next) {
       handler: function(request, reply) {
         sprintly.fetchProduct(request.auth.credentials, request.params.id)
           .then(function(product) {
-            reply.view('room', {
+            reply.view('product-room', {
              user: request.auth.credentials,
-             product: product
+             product: product,
+             room: product.id
             });
           })
           .catch(function(err) {
