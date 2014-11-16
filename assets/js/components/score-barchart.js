@@ -38,7 +38,7 @@ var ScoreBarchart = React.createClass({
     }
 
     return (
-      <div className={React.addons.classSet(classList)}></div>
+      <div className={React.addons.classSet(classList)}><h2>{label}</h2></div>
     );
   },
 

@@ -18,6 +18,7 @@ var Dashboard = React.createClass({
   getInitialState: function() {
     return {
       currentItem: 0,
+      velocity: 10,
       room: { members: [] },
       votes: {}
     };
@@ -25,9 +26,11 @@ var Dashboard = React.createClass({
 
   componentDidMount: function() {
     var self = this;
-    this.props.backlog.fetch().then(function() {
+    this.props.backlog.on('sync change', function() {
       self.forceUpdate();
     });
+
+    this.props.backlog.fetch();
 
     this.props.socket.on('room', function(room) {
       self.setState({ room: room });
@@ -98,7 +101,7 @@ var Dashboard = React.createClass({
       title = [
         'As a',
         <span className="title-detail">{item.get('who')}</span>,
-        'I want to',
+        'I want',
         <span className="title-detail">{item.get('what')}</span>,
         'so that',
         <span className="title-detail">{item.get('why')}</span>
@@ -108,6 +111,22 @@ var Dashboard = React.createClass({
     return <h1>{title}</h1>;
   },
 
+  getVelocity: function() {
+    var totalWeight = this.props.backlog.reduce(function(sum, item) {
+      return sum + voteService.POINT_SCALE[item.get('score')];
+    }, 0);
+
+    return totalWeight / this.state.velocity;
+  },
+
+  calculateWeeks: function(weeks) {
+    if (_.isNaN(weeks) || weeks === 0) {
+      return '?.?';
+    } else {
+      return Math.round(weeks*10) / 10;
+    }
+  },
+
   render: function() {
     var item = this.props.backlog.at(this.state.currentItem);
 
@@ -115,9 +134,13 @@ var Dashboard = React.createClass({
       return <div></div>;
     }
 
+    var velocity = this.getVelocity();
+    var capacity = velocity >= 1 ? 100 : Math.round(velocity * 100);
     var voteData = this.getVoteData(this.state.votes);
     var reporting = (voteData[0] / (this.state.room.members.length - 1)) * 100;
     var calculatedScore = voteService.calculate(this.state.votes);
+    var remainingWeeks = this.calculateWeeks(velocity);
+    var percentScored = Math.round(_.pull(this.props.backlog.pluck('score'), '~').length / this.props.backlog.length * 100);
 
     // console.log(voteData, reporting, calculatedScore);
 
@@ -138,12 +161,15 @@ var Dashboard = React.createClass({
           </div>
         </div>
         <div className="container score">
-          <div clasName="row">
+          <div className="row">
             <ScorePiechart
               roomId={this.state.room.id || this.props.roomId}
               voteData={voteData}
               reporting={reporting}
               calculatedScore={calculatedScore}
+              remainingWeeks={remainingWeeks}
+              percentScored={percentScored}
+              capacity={capacity}
             />
             <ScoreBarchart
               calculatedScore={calculatedScore}
