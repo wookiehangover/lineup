@@ -4,6 +4,7 @@
 
 var _ = require('lodash');
 var React = require('react/addons');
+var ControlBar = require('./control-bar');
 var ScorePiechart = require('./score-piechart');
 var ScoreBarchart = require('./score-barchart');
 var voteService = require('../lib/vote-service');
@@ -20,7 +21,9 @@ var Dashboard = React.createClass({
       currentItem: 0,
       velocity: 10,
       room: { members: [] },
-      votes: {}
+      votes: {},
+      flash: '',
+      needsSave: false
     };
   },
 
@@ -40,7 +43,11 @@ var Dashboard = React.createClass({
       if (msg.type === "vote") {
         var votes = self.state.votes;
         votes[msg.id] = msg.score;
-        self.setState({ votes: votes });
+        var calculatedScore = voteService.calculate(votes);
+        self.setState({
+          votes: votes,  needsSave: true,
+          calculatedScore: calculatedScore
+        });
       }
 
       if (msg.type === 'item'){
@@ -59,7 +66,12 @@ var Dashboard = React.createClass({
     e.preventDefault();
     var currentIndex = this.state.currentItem;
     var index = currentIndex === 0 ? this.props.backlog.length - 1 : currentIndex - 1;
-    this.setState({ currentItem: index, votes: {} });
+    this.setState({
+      votes: {},
+      needsSave: false,
+      currentItem: index,
+      calculatedScore: undefined
+    });
     this.props.backlog.trigger('currentItem', index);
     this.props.socket.emit('room message', this.props.roomId, { type: 'item', currentItem: index });
   },
@@ -68,17 +80,45 @@ var Dashboard = React.createClass({
     e.preventDefault();
     var currentIndex = this.state.currentItem;
     var index = currentIndex === this.props.backlog.length - 1 ? 0 : currentIndex + 1;
-    this.setState({ currentItem: index, votes: {} });
+    this.setState({
+      votes: {},
+      needsSave: false,
+      currentItem: index,
+      calculatedScore: undefined
+    });
     this.props.backlog.trigger('currentItem', index);
     this.props.socket.emit('room message', this.props.roomId, { type: 'item', currentItem: index });
   },
 
+  flash: function(msg) {
+    var self = this;
+    this.setState({ flash: msg });
+    setTimeout(function() {
+      self.setState({ flash: '' });
+    }, 3e3);
+  },
+
   handleSave: function() {
-    var score = voteService.calculate(this.state.votes);
+    var self = this;
     var item = this.props.backlog.at(this.state.currentItem);
+    var score = _.size(this.state.votes) >= 1 ?
+      voteService.calculate(this.state.votes) : item.get('score');
 
     item.save({ score: score }).then(function() {
-      console.log('Item saved!');
+      self.flash('Item Updated');
+    });
+  },
+
+  handleReset: function() {
+    var self = this;
+    var item = this.props.backlog.at(this.state.currentItem);
+    item.fetch().then(function() {
+      self.flash('Item & votes reset');
+      self.setState({ votes: {} });
+      self.props.socket.emit('room message', self.props.roomId, {
+        type: 'item',
+        currentItem: self.state.currentItem
+      });
     });
   },
 
@@ -92,6 +132,33 @@ var Dashboard = React.createClass({
     }
 
     return [voted, total];
+  },
+
+  getPercentScored: function() {
+    var unweighedCount = _.pull(this.props.backlog.pluck('score'), '~').length;
+    return Math.round(unweighedCount / this.props.backlog.length * 100);
+  },
+
+  getVelocity: function() {
+    var totalWeight = this.props.backlog.reduce(function(sum, item) {
+      return sum + voteService.POINT_SCALE[item.get('score')];
+    }, 0);
+
+    return totalWeight / this.state.velocity;
+  },
+
+  calculateWeeks: function(weeks) {
+    if (_.isNaN(weeks) || weeks === 0) {
+      return '?.?';
+    } else {
+      return Math.round(weeks*10) / 10;
+    }
+  },
+
+  updateScore: function(score) {
+    var item = this.props.backlog.at(this.state.currentItem);
+    item.set({ score: score }, { silent: true });
+    this.setState({ needsSave: true });
   },
 
   renderTitle: function(item) {
@@ -111,22 +178,6 @@ var Dashboard = React.createClass({
     return <h1>{title}</h1>;
   },
 
-  getVelocity: function() {
-    var totalWeight = this.props.backlog.reduce(function(sum, item) {
-      return sum + voteService.POINT_SCALE[item.get('score')];
-    }, 0);
-
-    return totalWeight / this.state.velocity;
-  },
-
-  calculateWeeks: function(weeks) {
-    if (_.isNaN(weeks) || weeks === 0) {
-      return '?.?';
-    } else {
-      return Math.round(weeks*10) / 10;
-    }
-  },
-
   render: function() {
     var item = this.props.backlog.at(this.state.currentItem);
 
@@ -137,17 +188,15 @@ var Dashboard = React.createClass({
     var velocity = this.getVelocity();
     var capacity = velocity >= 1 ? 100 : Math.round(velocity * 100);
     var voteData = this.getVoteData(this.state.votes);
-    var reporting = (voteData[0] / (this.state.room.members.length - 1)) * 100;
-    var calculatedScore = voteService.calculate(this.state.votes);
     var remainingWeeks = this.calculateWeeks(velocity);
-    var percentScored = Math.round(_.pull(this.props.backlog.pluck('score'), '~').length / this.props.backlog.length * 100);
+    var percentScored = this.getPercentScored();
 
-    // console.log(voteData, reporting, calculatedScore);
-
+    var calculatedScore = this.state.calculatedScore;
     if (_.size(this.state.votes) < 1 && !calculatedScore) {
       calculatedScore = item.get('score');
     }
 
+    var reporting = (voteData[0] / (this.state.room.members.length - 1)) * 100;
     if (_.isNaN(reporting)) {
       reporting = 0;
     }
@@ -161,9 +210,16 @@ var Dashboard = React.createClass({
           </div>
         </div>
         <div className="container score">
+          <ControlBar
+            flash={this.state.flash}
+            roomId={this.state.room.id || this.props.roomId}
+            handleSave={this.handleSave}
+            handleReset={this.handleReset}
+            totalMembers={this.state.room.members.length}
+            showControls={this.state.needsSave}
+          />
           <div className="row">
             <ScorePiechart
-              roomId={this.state.room.id || this.props.roomId}
               voteData={voteData}
               reporting={reporting}
               calculatedScore={calculatedScore}
@@ -172,14 +228,9 @@ var Dashboard = React.createClass({
               capacity={capacity}
             />
             <ScoreBarchart
+              updateScore={this.updateScore}
               calculatedScore={calculatedScore}
-              totalMembers={this.state.room.members.length}
             />
-          </div>
-          <div className="row">
-            <div className="col-sm-6 col-sm-offset-3 score-controls">
-              <button onClick={this.handleSave} className="btn btn-default btn-lg">Save Score</button>
-            </div>
           </div>
         </div>
         <nav>

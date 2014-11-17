@@ -4,7 +4,6 @@ var React = require('react/addons');
 var ScorePiechart = React.createClass({
 
   propTypes: {
-    roomId: React.PropTypes.string.isRequired,
     calculatedScore: React.PropTypes.string.isRequired,
     reporting: React.PropTypes.number.isRequired,
     voteData: React.PropTypes.array.isRequired,
@@ -27,26 +26,11 @@ var ScorePiechart = React.createClass({
     }
   },
 
-  renderRoomLink: function(roomId) {
-    var linkText = location.protocol + '//' + location.host + '/room/';
-
-    return (
-      <div className="room-link">
-        <a href={linkText + roomId}>{linkText}</a>
-        <div className="col-xs-3">
-          <input className="form-control" defaultValue={roomId}/>
-        </div>
-      </div>
-    );
-  },
-
   render: function() {
-
     var totalCapacity = 100 - this.props.capacity;
 
     return (
       <div className="col-sm-6 votes">
-        {this.renderRoomLink(this.props.roomId)}
         <h2 className="team-score">{this.props.calculatedScore}</h2>
         <rd3.PieChart
           data={this.props.voteData}

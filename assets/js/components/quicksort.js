@@ -2,6 +2,7 @@
  * @jsx React.DOM
  */
 
+var _ = require('lodash');
 var React = require('react/addons');
 
 var Backlog = React.createClass({
@@ -34,7 +35,8 @@ var Backlog = React.createClass({
         {this.props.backlog.map(function(model, i){
           var classes = {
             'quicksort-item': true,
-            'active': i == this.state.currentItem
+            'active': i == this.state.currentItem,
+            'needsUpdate': !!model.changed.score
           };
 
           classes['item-' + model.get('type')] = true;

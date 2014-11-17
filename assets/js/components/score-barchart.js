@@ -1,11 +1,17 @@
+var _ = require('lodash');
 var React = require('react/addons');
 var voteService = require('../lib/vote-service');
 
 var ScoreBarchart = React.createClass({
 
   propTypes: {
-    totalMembers: React.PropTypes.number.isRequired,
-    calculatedScore: React.PropTypes.string.isRequired
+    calculatedScore: React.PropTypes.string.isRequired,
+    updateScore: React.PropTypes.func.isRequired
+  },
+
+  handleClick: function(score, e) {
+    e.preventDefault();
+    this.props.updateScore(score);
   },
 
   renderBar: function(label, score) {
@@ -38,20 +44,13 @@ var ScoreBarchart = React.createClass({
     }
 
     return (
-      <div className={React.addons.classSet(classList)}><h2>{label}</h2></div>
+      <div className={React.addons.classSet(classList)} onClick={_.partial(this.handleClick, label)}><h2>{label}</h2></div>
     );
-  },
-
-  renderConnectedUsers: function(memberCount) {
-    memberCount -= 1;
-    var message = [memberCount, (memberCount === 1 ? 'User': 'Users'),'Connected'];
-    return (<h3 className="user-status">{message.join(' ')}</h3>);
   },
 
   render: function() {
     return (
       <div className="col-sm-6">
-        {this.renderConnectedUsers(this.props.totalMembers)}
         <div className="scale">
           {this.renderBar('~', this.props.calculatedScore)}
           {this.renderBar('S', this.props.calculatedScore)}

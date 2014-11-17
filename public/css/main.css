@@ -6709,40 +6709,15 @@ body {
 .votes .team-score {
   position: absolute;
   width: 20%;
-  top: 142px;
+  top: 62px;
   left: 40%;
   margin: 0;
   text-align: center;
   font-size: 6em;
   text-transform: uppercase;
 }
-.votes .room-link {
-  margin: 1.2em 0 2em;
-}
-.votes .room-link a {
-  float: left;
-  color: #222;
-  text-decoration: none;
-  font-size: 1.2em;
-  margin-top: 6px;
-}
-.votes .room-link .col-xs-4 {
-  padding-left: 2px;
-}
-.votes .room-link input {
-  font-size: 1.2em;
-}
 .votes svg {
   margin: auto;
-}
-.user-status {
-  font-size: 1.5em;
-  text-align: right;
-  margin: 1em 0;
-}
-.score-controls {
-  padding: 2em inherit;
-  text-align: center;
 }
 .metrics {
   padding-top: 2em;
@@ -6795,6 +6770,40 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
+}
+.control-bar {
+  margin: 1em inherit;
+}
+.control-bar .room-link a {
+  float: left;
+  color: #222;
+  text-decoration: none;
+  margin-top: 6px;
+}
+.control-bar .room-link a:hover {
+  text-decoration: underline;
+}
+.control-bar .room-link .col-xs-4 {
+  padding-left: 2px;
+}
+.control-bar .room-link .isvg {
+  float: left;
+}
+.control-bar .room-link .isvg svg {
+  height: 60px;
+  stroke: #000;
+}
+.control-bar .user-status {
+  float: left;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.control-bar .score-controls .btn {
+  margin-right: 0.5em;
+}
+.control-bar .score-controls .flash {
+  display: inline-block;
+  padding: 5px;
+  font-size: 0.8em;
 }
 body.voted {
   background: #333;
