@@ -56,7 +56,7 @@ var Dashboard = React.createClass({
     });
 
     this.props.socket.on('reconnect', function() {
-      self.props.socket.emit('join room', self.state.room);
+      self.props.socket.emit('join room', self.props.roomId);
     });
 
     this.props.socket.emit('join room', this.props.roomId);
@@ -96,6 +96,12 @@ var Dashboard = React.createClass({
     setTimeout(function() {
       self.setState({ flash: '' });
     }, 3e3);
+  },
+
+  changeRoomId: function(roomId) {
+    this.setProps({ roomId: roomId });
+    this.props.socket.emit('join room', roomId);
+    this.flash('Room name updated');
   },
 
   handleSave: function() {
@@ -215,6 +221,7 @@ var Dashboard = React.createClass({
             roomId={this.state.room.id || this.props.roomId}
             handleSave={this.handleSave}
             handleReset={this.handleReset}
+            changeRoomId={this.changeRoomId}
             totalMembers={this.state.room.members.length}
             showControls={this.state.needsSave}
           />

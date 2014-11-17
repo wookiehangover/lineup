@@ -19,6 +19,7 @@ exports.register = function(plugin, options, next) {
             reply.view('product-room', {
              user: request.auth.credentials,
              product: product,
+             title: product.get('name') + ' | Sprintly Lineup',
              room: product.id
             });
           })
