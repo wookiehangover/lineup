@@ -6783,7 +6783,7 @@ body {
 .control-bar .room-link a:hover {
   text-decoration: underline;
 }
-.control-bar .room-link .col-xs-4 {
+.control-bar .room-link .col-xs-3 {
   padding-left: 2px;
 }
 .control-bar .room-link .isvg {

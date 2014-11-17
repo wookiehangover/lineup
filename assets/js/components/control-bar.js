@@ -53,7 +53,7 @@ var ControlBar = React.createClass({
       <div className="col-sm-6 room-link">
         <InlineSvg src="/images/iphone.svg"></InlineSvg>
         <a href={linkText + roomId}>{linkText}</a>
-        <div className="col-xs-4">
+        <div className="col-xs-3">
           <input className="form-control" defaultValue={roomId}/>
         </div>
         {this.renderConnectedUsers()}
